@@ -1,0 +1,30 @@
+local PLAYER = hash("player")
+local COLLISION_RESPONSE= hash("collision_response")
+
+function init(self)
+self.powerup=false
+end
+
+function final(self)
+	msg.post(self.parent,"powerup_dead")
+end
+
+function update(self, dt)
+
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id ==COLLISION_RESPONSE and message.group ==PLAYER then
+		print("powerup", sender)
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

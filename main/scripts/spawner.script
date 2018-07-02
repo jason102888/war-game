@@ -1,0 +1,53 @@
+local function random_position()
+	return vmath.vector3(math.random(40, 996), math.random(40, 996), 0)
+end
+local function spawn_enemy()
+	return factory.create("#enemy_factory", random_position())
+end
+
+local function spawn_medic(position)
+	return factory.create("#medic_factory", random_position())
+end
+local function spawn_helicopter()
+	return factory.create("#helicopter_factory", random_position())
+end
+
+local function spawn_tank(position)
+	return factory.create("#tank_factory", random_position())
+end
+local function spawn_powerup(position)
+	return factory.create("#powerup_factory", random_position())
+end
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	math.randomseed(os.time())
+	self.tank = {}
+	self.powerup = {}
+	self.medic={}
+	self.helicopter={}
+	self.enemy={}
+	for i = 1, 10 do
+		table.insert(self.tank, spawn_tank())
+	end
+end
+
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+function update(self, dt)
+	if messag_id==("collision_response") then 
+		table.insert(self.tank, spawn_tank(vmath.vector3(random_position(40,996),random_position(40,996),0)))
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

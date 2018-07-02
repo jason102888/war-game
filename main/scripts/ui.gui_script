@@ -1,0 +1,68 @@
+local text_nodes = {"score","health1","health2","health3","health4","health5","wave","gameover","endscore",}
+local box_nodes = {"playagain"}
+local health = 5
+function init(self)
+	self.score = 0  
+	self.endscore = 0                                        
+	self.health = 5
+end
+--function show(self)
+	--reset_lives(self)
+	--node = gui.get_node("game_over")
+	--gui.set_endabled(node,false)
+	--for i, id in pairs(test_nodes) do 
+		--node = gui.get_node(id)
+		--local c = gui.get_color(node)
+		--gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 0))
+		--c.w = 1.0
+		--gui.animate(node, gui.PROP_COLOR, c, gui.EASING_INOUTSINE, 0.75, 0.25, function(), end)
+	--end
+--end
+
+--function hide(self, disable)
+	--for i, id in pairs(text_nodes) do
+		--node = gui.get_node(id)
+		--local c = gui.get_color(node)
+		--c.w = 0.0
+		--gui.animate(node, gui.PROP_COLOR, c, gui.EASING_INOUTSINE, 0.75, 0.25,
+		--function()
+			--if disable == true then 
+				--msg.post(".", "disable")
+			--end
+		--end
+	--end
+--end
+--function show_game_over(self)
+	--hide(false)
+	--node = gui.get_node("game_over")
+	--gui.set_color(node, vmath.vector4(1, 1, 1, 1)), gui.EASING_INOUTSINE, 7.0, 0.0,
+	--function()
+		--gui.set_enabled(node,false)
+	--end
+	--gui.PLAYBACK_ONCE_PINGPONG
+--end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("add_score") then                 
+		self.score = self.score + message.score             
+		local scorenode = gui.get_node("score")             
+		gui.set_text(scorenode, "SCORE: " .. self.score)    
+--elseif message_id == hash("take_damage") then
+		--self.health = self.health-message.damage
+		--node =gui.get_node("health".. healths)
+		--gui.set_color(node, vmath.vector4(1, 1, 1, 1))
+		--gui.animate(node, gui.PROP_COLOR, vmath.vector4(1,1,1,0), gui.EASING_OUTCIRC, 1.0)
+--elseif message_id== hash("healing") then 
+		--self.health = self.health+message.health
+		--node=gui.get_node("health"..healths)
+		--gui.set_color("health", 0,0,0,1)
+		--gui.animate(node, gui.PROP_COLOR, vmath.vector4(1,1,1,1), gui.EASING_OUTCIRC, 1.0)
+		--elseif message_id == hash("show") then
+			--hide(self, true)
+		--elseif message_id == hash("hide") then
+			--show_game_over(self)
+elseif message_id == hash("gameover") then 
+show_game_over(self)
+		msg.post("controller:/controller","show_menu")
+	end
+end

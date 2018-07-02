@@ -1,0 +1,54 @@
+function update(self, dt)
+	-- request ray cast
+	local my_start = vmath.vector3(0, 0, 0)
+	local my_end = vmath.vector3(100, 1000, 1000)
+	local my_groups = { hash("my_group1"), hash("my_group2") }
+
+	physics.ray_cast(my_start, my_end, my_groups)
+end
+
+function on_message(self, message_id, message, sender)
+	-- check for ray cast responses
+	if message_id == hash("ray_cast_response") then
+		-- act on the hit
+	elseif message_id == hash("ray_cast_missed") then
+		-- act on the miss
+	end
+end
+function on_message(self, message_id, message, sender)
+	-- Handle collision
+	if message_id == hash("contact_point_response") then
+		local newpos = go.get_position() + message.normal * message.distance
+		go.set_position(newpos)
+	end
+end
+unction init(self)
+-- correction vector
+self.correction = vmath.vector3()
+end
+
+function update(self, dt)
+-- reset correction
+self.correction = vmath.vector3()
+end
+
+function on_message(self, message_id, message, sender)
+-- Handle collision
+if message_id == hash("contact_point_response") then
+	-- Get the info needed to move out of collision. We might
+	-- get several contact points back and have to calculate
+	-- how to move out of all accumulatively:
+	if message.distance > 0 then
+		-- First, project the penetration vector on
+		-- accumulated correction
+		local proj = vmath.project(self.correction, message.normal * message.distance)
+		if proj < 1 then
+			-- Only care for projections that does not overshoot.
+			local comp = (message.distance - message.distance * proj) * message.normal
+			-- Apply compensation
+			go.set_position(go.get_position() + comp)
+			-- Accumulate the corrections done this frame
+			self.correction = self.correction + comp
+		end
+	end
+end
